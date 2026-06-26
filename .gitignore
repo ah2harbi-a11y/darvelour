@@ -28,3 +28,6 @@ server/uploads/
 # Claude Code local settings
 .claude/
 .env*
+
+# Local DB backups (contain user data)
+backups/
