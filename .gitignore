@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+build/
+dist/
+
+# Local SQLite database (libSQL file mode for dev)
+*.db
+*.db-shm
+*.db-wal
+
+# Locally uploaded images (production uses Vercel Blob)
+server/uploads/
+
+# Env / secrets
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# Misc
+.DS_Store
+*.log
+
+# Claude Code local settings
+.claude/

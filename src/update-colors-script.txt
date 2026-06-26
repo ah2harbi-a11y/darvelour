@@ -1,0 +1,46 @@
+## DressNow Luxury Color Migration Guide
+
+This file contains the color replacements needed for all remaining components:
+
+### Color Replacements:
+1. bg-neutral-900 → bg-charcoal
+2. bg-neutral-800 → bg-charcoal-light  
+3. bg-neutral-100 → bg-ivory-dark
+4. bg-neutral-50 → bg-ivory-dark
+5. text-neutral-900 → text-charcoal
+6. text-neutral-800 → text-charcoal
+7. text-neutral-600 → text-warm-grey
+8. text-neutral-500 → text-warm-grey
+9. text-neutral-400 → text-warm-grey-light
+10. border-neutral-900 → border-emerald
+11. border-neutral-300 → border-warm-grey-lighter
+12. border-neutral-200 → border-warm-grey-lighter
+
+### Component Status:
+✅ App.tsx - DONE
+✅ DesktopHome.tsx - DONE  
+✅ DesktopAuth.tsx - DONE
+✅ DesktopOnboarding.tsx - DONE
+✅ DesktopSearch.tsx - DONE
+✅ DesktopCart.tsx - DONE
+⏳ DesktopDressDetail.tsx - IN PROGRESS
+⏳ DesktopCheckout.tsx - PENDING
+⏳ DesktopProfile.tsx - PENDING
+⏳ DesktopWishlist.tsx - PENDING
+⏳ DesktopMyOrders.tsx - PENDING
+⏳ DesktopBoutique.tsx - PENDING
+⏳ DesktopVirtualTryOn.tsx - PENDING
+⏳ DesktopAIStylist.tsx - PENDING
+⏳ DesktopExclusivity.tsx - PENDING
+⏳ DesktopMyExclusives.tsx - PENDING
+⏳ DesktopOrderTracking.tsx - PENDING
+
+### Luxury UI Patterns to Apply:
+- heading-serif for all h1, h2, h3 elements
+- luxury-transition for all hover states
+- luxury-shadow or luxury-shadow-sm for cards
+- Gold (#C9A24D) for premium badges, ratings, accents
+- Emerald (#0F5E4A) for primary CTAs and active states
+- Ivory (#FAF8F4) as main background
+- Warm Grey (#9A9A9A) for secondary text
+- Charcoal (#1F1F1F) for primary text

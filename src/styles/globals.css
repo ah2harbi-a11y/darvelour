@@ -1,0 +1,378 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@300;400;500;600;700&display=swap');
+
+@layer theme, base, components, utilities;
+
+@layer theme {
+  :root {
+    --font-size: 16px;
+    
+    /* Ultra-Luxury Editorial Color System */
+    --deep-charcoal: #0D0D0D;
+    --luxury-gold: #C5A059;
+    
+    /* Modern Imperial Luxury Color System */
+    /* Primary: Deep Imperial Green - Primary brand & action color */
+    --imperial-green: #064635;
+    --imperial-green-light: #0A5C48;
+    --imperial-green-dark: #043428;
+    --imperial-green-subtle: #EEF5F2;
+    
+    /* Jewel Tone Accent: Burgundy - Secondary emphasis (sparingly) */
+    --burgundy: #6B1C23;
+    --burgundy-light: #8B2530;
+    --burgundy-subtle: #F8F0F1;
+    
+    /* Micro Accent: Muted Champagne - Dividers, lines, subtle highlights */
+    --champagne: #D4C5B0;
+    --champagne-light: #E3D5C1;
+    --champagne-subtle: #F7F4EF;
+    
+    /* Neutrals: Warm porcelain and deep charcoal */
+    --porcelain: #F8F7F4;
+    --porcelain-warm: #F5F3EF;
+    --warm-grey: #8B8B89;
+    --warm-grey-light: #B8B8B6;
+    --warm-grey-lighter: #D9D9D7;
+    --charcoal: #2A2A2A;
+    --charcoal-light: #3D3D3D;
+    
+    /* Semantic colors */
+    --background: var(--porcelain);
+    --foreground: var(--charcoal);
+    --card: #ffffff;
+    --card-foreground: var(--charcoal);
+    --popover: #ffffff;
+    --popover-foreground: var(--charcoal);
+    --primary: var(--imperial-green);
+    --primary-foreground: var(--porcelain);
+    --secondary: var(--porcelain-warm);
+    --secondary-foreground: var(--imperial-green);
+    --muted: var(--warm-grey-lighter);
+    --muted-foreground: var(--warm-grey);
+    --accent: var(--burgundy);
+    --accent-foreground: var(--porcelain);
+    --destructive: #dc2626;
+    --destructive-foreground: #ffffff;
+    --border: var(--champagne);
+    --input: transparent;
+    --input-background: #ffffff;
+    --switch-background: var(--warm-grey-light);
+    --font-weight-medium: 500;
+    --font-weight-normal: 400;
+    --ring: var(--imperial-green);
+    --radius: 0.25rem;
+    
+    /* Typography */
+    --font-heading: 'Playfair Display', serif;
+    --font-heading-alt: 'Cormorant Garamond', serif;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  .dark {
+    --background: var(--charcoal);
+    --foreground: var(--porcelain);
+    --card: var(--charcoal-light);
+    --card-foreground: var(--porcelain);
+    --popover: var(--charcoal-light);
+    --popover-foreground: var(--porcelain);
+    --primary: var(--imperial-green-light);
+    --primary-foreground: var(--porcelain);
+    --secondary: var(--charcoal-light);
+    --secondary-foreground: var(--porcelain);
+    --muted: var(--charcoal-light);
+    --muted-foreground: var(--warm-grey);
+    --accent: var(--burgundy);
+    --accent-foreground: var(--porcelain);
+    --border: var(--charcoal-light);
+    --input: var(--charcoal-light);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
+  }
+}
+
+/**
+ * Base typography for luxury editorial feel
+ */
+@layer base {
+  h1 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--charcoal);
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.3;
+    letter-spacing: -0.015em;
+    color: var(--charcoal);
+  }
+
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--charcoal);
+  }
+
+  h4 {
+    font-family: var(--font-body);
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    color: var(--charcoal);
+  }
+
+  label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+  }
+
+  button {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+
+  input, textarea {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Custom utility classes for luxury design */
+@layer utilities {
+  .heading-serif {
+    font-family: var(--font-heading);
+  }
+  
+  /* Modern Imperial Green - Primary brand color */
+  .text-imperial {
+    color: var(--imperial-green);
+  }
+  
+  .bg-imperial {
+    background-color: var(--imperial-green);
+  }
+  
+  .border-imperial {
+    border-color: var(--imperial-green);
+  }
+  
+  .text-imperial-light {
+    color: var(--imperial-green-light);
+  }
+  
+  .bg-imperial-light {
+    background-color: var(--imperial-green-light);
+  }
+  
+  .bg-imperial-subtle {
+    background-color: var(--imperial-green-subtle);
+  }
+  
+  /* Burgundy - Jewel tone accent (sparingly) */
+  .text-burgundy {
+    color: var(--burgundy);
+  }
+  
+  .bg-burgundy {
+    background-color: var(--burgundy);
+  }
+  
+  .border-burgundy {
+    border-color: var(--burgundy);
+  }
+  
+  .bg-burgundy-subtle {
+    background-color: var(--burgundy-subtle);
+  }
+  
+  /* Champagne - Micro accents only */
+  .text-champagne {
+    color: var(--champagne);
+  }
+  
+  .bg-champagne {
+    background-color: var(--champagne);
+  }
+  
+  .border-champagne {
+    border-color: var(--champagne);
+  }
+  
+  .bg-champagne-subtle {
+    background-color: var(--champagne-subtle);
+  }
+  
+  /* Neutrals */
+  .bg-porcelain {
+    background-color: var(--porcelain);
+  }
+  
+  .bg-porcelain-warm {
+    background-color: var(--porcelain-warm);
+  }
+  
+  .text-charcoal {
+    color: var(--charcoal);
+  }
+  
+  .bg-charcoal {
+    background-color: var(--charcoal);
+  }
+  
+  .text-porcelain {
+    color: var(--porcelain);
+  }
+  
+  .text-warm-grey {
+    color: var(--warm-grey);
+  }
+  
+  .border-warm-grey-lighter {
+    border-color: var(--warm-grey-lighter);
+  }
+  
+  .border-champagne-light {
+    border-color: var(--champagne-light);
+  }
+  
+  /* Legacy compatibility - map to new colors */
+  .text-emerald {
+    color: var(--imperial-green);
+  }
+  
+  .bg-emerald {
+    background-color: var(--imperial-green);
+  }
+  
+  .border-emerald {
+    border-color: var(--imperial-green);
+  }
+  
+  .bg-ivory {
+    background-color: var(--porcelain);
+  }
+  
+  .bg-ivory-dark {
+    background-color: var(--porcelain-warm);
+  }
+  
+  .text-ivory {
+    color: var(--porcelain);
+  }
+  
+  .text-gold {
+    color: var(--champagne);
+  }
+  
+  .bg-gold {
+    background-color: var(--burgundy);
+  }
+  
+  .border-gold {
+    border-color: var(--champagne);
+  }
+  
+  /* Shadows - softer for Modern Imperial */
+  .luxury-shadow {
+    box-shadow: 0 4px 24px rgba(42, 42, 42, 0.06);
+  }
+  
+  .luxury-shadow-sm {
+    box-shadow: 0 2px 12px rgba(42, 42, 42, 0.04);
+  }
+  
+  .luxury-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Film grain texture */
+  .film-grain {
+    position: relative;
+  }
+  
+  .film-grain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='6.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.01'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 1;
+    mix-blend-mode: overlay;
+  }
+  
+  /* Ultra-luxury editorial utilities */
+  .text-luxury-gold {
+    color: var(--luxury-gold);
+  }
+  
+  .bg-deep-charcoal {
+    background-color: var(--deep-charcoal);
+  }
+  
+  .border-luxury-gold {
+    border-color: var(--luxury-gold);
+  }
+  
+  .ghost-button {
+    background: transparent;
+    border: 0.75px solid #C5A059;
+    color: var(--luxury-gold);
+    padding: 1rem 2.5rem;
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+  
+  .ghost-button:hover {
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.3);
+    border-color: #C5A059;
+  }
+}

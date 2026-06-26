@@ -1,0 +1,301 @@
+/* Admin Panel Dark Theme Styles */
+
+/* Base colors */
+.admin-bg { background-color: #030712; }
+.admin-bg-card { background-color: #111827; }
+.admin-bg-input { background-color: #1f2937; }
+.admin-bg-hover:hover { background-color: #111827; }
+.admin-bg-hover-input:hover { background-color: #1f2937; }
+
+/* Borders */
+.admin-border { border-color: #1f2937; }
+.admin-border-subtle { border-color: #111827; }
+.admin-border-input { border-color: #374151; }
+
+/* Text */
+.admin-text { color: #ffffff; }
+.admin-text-muted { color: #6b7280; }
+.admin-text-dim { color: #9ca3af; }
+.admin-text-faint { color: #4b5563; }
+
+/* Sidebar */
+.admin-sidebar {
+  width: 260px;
+  min-width: 260px;
+  background-color: #030712;
+  border-right: 1px solid #111827;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 30;
+}
+
+.admin-main {
+  margin-left: 260px;
+  flex: 1;
+  padding: 32px;
+  min-height: 100vh;
+  background-color: #030712;
+}
+
+/* Nav button */
+.admin-nav-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #6b7280;
+  transition: all 0.15s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.admin-nav-btn:hover {
+  color: #ffffff;
+  background-color: #111827;
+}
+.admin-nav-btn.active {
+  color: #000000;
+  background-color: #ffffff;
+  font-weight: 500;
+}
+
+/* Stat cards */
+.admin-stat-card {
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 24px;
+}
+.admin-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 12px;
+}
+.admin-stat-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* List items */
+.admin-list-item {
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* Table */
+.admin-table-wrap {
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  overflow: hidden;
+}
+.admin-table {
+  width: 100%;
+  font-size: 14px;
+  border-collapse: collapse;
+}
+.admin-table thead tr {
+  border-bottom: 1px solid #1f2937;
+}
+.admin-table th {
+  padding: 12px 20px;
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+  text-align: left;
+}
+.admin-table td {
+  padding: 12px 20px;
+}
+.admin-table tbody tr {
+  border-bottom: 1px solid rgba(31, 41, 55, 0.5);
+}
+.admin-table tbody tr:hover {
+  background-color: rgba(31, 41, 55, 0.3);
+}
+
+/* Buttons */
+.admin-btn-primary {
+  width: 100%;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.admin-btn-primary:hover {
+  background-color: #f3f4f6;
+}
+
+.admin-btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #000000;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+.admin-btn-add:hover {
+  background-color: #f3f4f6;
+}
+
+.admin-btn-icon {
+  padding: 6px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-btn-icon:hover {
+  color: #ffffff;
+  background-color: #1f2937;
+}
+.admin-btn-icon.danger:hover {
+  color: #f87171;
+}
+
+/* Form inputs */
+.admin-input {
+  width: 100%;
+  padding: 10px 16px;
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.admin-input:focus {
+  border-color: #6b7280;
+}
+.admin-input::placeholder {
+  color: #4b5563;
+}
+
+.admin-select {
+  padding: 6px 12px;
+  background-color: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 12px;
+  outline: none;
+}
+
+.admin-label {
+  display: block;
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 6px;
+}
+
+/* Modal */
+.admin-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.admin-modal {
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 512px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+.admin-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #1f2937;
+}
+.admin-modal-body {
+  padding: 24px;
+}
+
+/* Status badges */
+.admin-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-weight: 500;
+  display: inline-block;
+}
+.admin-badge-green { background-color: rgba(20, 83, 45, 0.5); color: #4ade80; }
+.admin-badge-yellow { background-color: rgba(113, 63, 18, 0.5); color: #facc15; }
+.admin-badge-blue { background-color: rgba(30, 58, 138, 0.5); color: #60a5fa; }
+.admin-badge-red { background-color: rgba(127, 29, 29, 0.5); color: #f87171; }
+.admin-badge-gray { background-color: #1f2937; color: #9ca3af; }
+
+/* Login */
+.admin-login-wrap {
+  min-height: 100vh;
+  background-color: #030712;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.admin-login-card {
+  background-color: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 384px;
+}
+
+/* Grid helpers */
+.admin-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.admin-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.admin-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+/* Initials avatar */
+.admin-avatar {
+  width: 48px;
+  height: 48px;
+  background-color: #1f2937;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
+}
