@@ -27,6 +27,13 @@ export default function MobileDressDetail({ onNavigate, onGoBack, onAddToCart, o
   const isExpress = dress?.express ?? false;
   const image = getDressImage(dressId || 1);
   const [selectedSize, setSelectedSize] = useState('M');
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = () => {
+    onAddToCart(dressId || 1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
   const boutiqueData = getBoutiqueByName(boutiqueName);
   const initials = getBoutiqueInitials(boutiqueName);
 
@@ -161,10 +168,10 @@ export default function MobileDressDetail({ onNavigate, onGoBack, onAddToCart, o
         )}
         <div className="px-4 py-3 flex gap-2">
           <button
-            onClick={() => { onAddToCart(dressId || 1); onNavigate('cart'); }}
+            onClick={added ? () => onNavigate('cart') : handleAdd}
             className="flex-[2] bg-black text-white py-3.5 font-medium text-sm rounded-xl"
           >
-            Add to Bag - SAR {price.toLocaleString()}
+            {added ? '✓ Added — View Bag' : `Add to Bag - SAR ${price.toLocaleString()}`}
           </button>
           <button
             onClick={() => onAddToCart(dressId || 1)}

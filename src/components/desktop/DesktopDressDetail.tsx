@@ -23,6 +23,13 @@ export default function DesktopDressDetail({ onNavigate, onGoBack, onAddToCart, 
   const collection = dress?.collection || 'Evening Collection';
   const image = getDressImage(dressId || 1);
   const [selectedSize, setSelectedSize] = useState('M');
+  const [added, setAdded] = useState(false);
+
+  const handleAdd = () => {
+    onAddToCart(dressId || 1);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -108,11 +115,19 @@ export default function DesktopDressDetail({ onNavigate, onGoBack, onAddToCart, 
             {/* Actions */}
             <div className="space-y-3 pt-4">
               <button
-                onClick={() => { onAddToCart(dressId || 1); onNavigate('cart'); }}
+                onClick={handleAdd}
                 className="w-full bg-black text-white py-4 font-bold text-sm tracking-wider hover:bg-gray-900"
               >
-                ADD TO BAG - SAR {price.toLocaleString()}
+                {added ? '✓ ADDED TO BAG' : `ADD TO BAG - SAR ${price.toLocaleString()}`}
               </button>
+              {added && (
+                <button
+                  onClick={() => onNavigate('cart')}
+                  className="w-full border border-black py-3 font-bold text-xs tracking-wider hover:bg-gray-50"
+                >
+                  VIEW BAG
+                </button>
+              )}
               <button
                 onClick={() => onAddToWishlist(dressId || 1)}
                 className="w-full border border-black py-4 font-bold text-sm tracking-wider hover:bg-gray-50 flex items-center justify-center gap-2"
