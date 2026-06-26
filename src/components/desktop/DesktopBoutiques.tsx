@@ -48,18 +48,34 @@ export default function DesktopBoutiques({ onNavigate, onSelectBoutique }: Deskt
                     </div>
                   ))}
                   {dresses.length === 0 && (
-                    <div className="flex-1 flex items-center justify-center text-gray-300 text-sm">
-                      No dresses yet
-                    </div>
+                    boutique.image_url ? (
+                      <ImageWithFallback
+                        src={boutique.image_url}
+                        alt={boutique.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex-1 flex items-center justify-center text-gray-300 text-sm">
+                        No dresses yet
+                      </div>
+                    )
                   )}
                 </div>
 
                 {/* Boutique Info */}
                 <div className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
-                      {initials}
-                    </div>
+                    {boutique.image_url ? (
+                      <img
+                        src={boutique.image_url}
+                        alt={boutique.name}
+                        className="w-14 h-14 rounded-full object-cover flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
+                        {initials}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <h2 className="text-lg font-medium text-black truncate">{boutique.name}</h2>

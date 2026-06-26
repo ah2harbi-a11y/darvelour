@@ -56,18 +56,34 @@ export default function MobileBoutiques({ onNavigate, onGoBack, onSelectBoutique
                     </div>
                   ))}
                   {dresses.length === 0 && (
-                    <div className="flex-1 flex items-center justify-center bg-gray-100 text-gray-300 text-xs">
-                      No dresses yet
-                    </div>
+                    boutique.image_url ? (
+                      <ImageWithFallback
+                        src={boutique.image_url}
+                        alt={boutique.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex-1 flex items-center justify-center bg-gray-100 text-gray-300 text-xs">
+                        No dresses yet
+                      </div>
+                    )
                   )}
                 </div>
 
                 {/* Info */}
                 <div className="p-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
-                      {initials}
-                    </div>
+                    {boutique.image_url ? (
+                      <img
+                        src={boutique.image_url}
+                        alt={boutique.name}
+                        className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                        {initials}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <h3 className="text-sm font-medium text-black truncate">{boutique.name}</h3>

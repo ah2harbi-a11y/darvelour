@@ -38,9 +38,13 @@ export default function MobileBoutique({ onNavigate, onGoBack, wishlistItems, bo
             {/* Boutique Header */}
             <div className="bg-white border-b border-gray-200 p-4">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold">
-                  {initials}
-                </div>
+                {boutique?.image_url ? (
+                  <img src={boutique.image_url} alt={boutique.name} className="w-14 h-14 rounded-full object-cover" />
+                ) : (
+                  <div className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold">
+                    {initials}
+                  </div>
+                )}
                 <div>
                   <div className="flex items-center gap-1.5">
                     <h2 className="text-lg font-medium text-black">{boutique.name}</h2>

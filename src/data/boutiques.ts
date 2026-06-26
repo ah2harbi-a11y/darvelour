@@ -9,6 +9,7 @@ export interface Boutique {
   verified: boolean;
   specialties: string[];
   dressCount?: number;
+  image_url?: string;
 }
 
 // Fallback data
@@ -43,6 +44,7 @@ export async function loadBoutiques(): Promise<Boutique[]> {
           verified: !!b.verified,
           specialties: Array.isArray(b.specialties) ? b.specialties : (b.specialties ? String(b.specialties).split(',').map((s: string) => s.trim()).filter(Boolean) : []),
           dressCount: b.dressCount || 0,
+          image_url: b.image_url || '',
         }));
         return boutiques;
       }
