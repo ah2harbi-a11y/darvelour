@@ -132,10 +132,12 @@ function MultiImageUploader({ value, onChange }: { value: string[]; onChange: (u
     setUploading(true);
     try {
       const uploaded: string[] = [];
+      let failed = 0;
       for (const f of imgs) {
-        try { uploaded.push(await uploadImage(f)); } catch { /* skip failed */ }
+        try { uploaded.push(await uploadImage(f)); } catch { failed++; }
       }
       if (uploaded.length) onChange([...value, ...uploaded]);
+      if (failed) alert(`${failed} image${failed > 1 ? 's' : ''} failed to upload. You can paste an image URL instead.`);
     } finally {
       setUploading(false);
     }
