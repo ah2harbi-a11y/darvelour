@@ -19,7 +19,7 @@ export default function MobileSearch({ onNavigate, onGoBack, onAddToCart, onAddT
   const [showFilters, setShowFilters] = useState(false);
   const [selectedOccasion, setSelectedOccasion] = useState('all');
 
-  const dresses = allDresses.slice(0, 12);
+  const dresses = [...allDresses].sort((a, b) => b.id - a.id).slice(0, 12);
 
   const occasions = [
     { id: 'all', icon: '✨', name: 'All' },

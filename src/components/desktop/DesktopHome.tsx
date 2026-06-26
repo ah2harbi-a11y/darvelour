@@ -13,11 +13,11 @@ interface DesktopHomeProps {
 }
 
 export default function DesktopHome({ onNavigate, onAddToCart, onAddToWishlist }: DesktopHomeProps) {
-  const dresses = sharedDresses.map((d, i) => ({
+  const dresses = [...sharedDresses].sort((a, b) => b.id - a.id).map((d, i) => ({
     ...d,
     expressDelivery: d.express,
     exclusive: i % 3 === 0,
-    image: dressImages[i % dressImages.length],
+    image: d.image_url || dressImages[i % dressImages.length],
   }));
 
   return (

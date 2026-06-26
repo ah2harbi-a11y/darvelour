@@ -15,7 +15,8 @@ interface MobileHomeProps {
 }
 
 export default function MobileHome({ onNavigate, onAddToCart, onAddToWishlist, cartItems, wishlistItems }: MobileHomeProps) {
-  const featuredDresses = allDresses.slice(0, 6);
+  const sortedDresses = [...allDresses].sort((a, b) => b.id - a.id);
+  const featuredDresses = sortedDresses.slice(0, 6);
 
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col">
@@ -168,7 +169,7 @@ export default function MobileHome({ onNavigate, onAddToCart, onAddToWishlist, c
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {allDresses.slice(6, 10).map((dress) => (
+            {sortedDresses.slice(6, 10).map((dress) => (
               <div
                 key={dress.id}
                 onClick={() => onNavigate('dress-detail', dress.id)}

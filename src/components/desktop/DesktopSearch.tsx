@@ -2,7 +2,7 @@ import { SlidersHorizontal, Grid, List, Heart, ShoppingBag, Sparkles, Star } fro
 import { Page } from '../../App';
 import { allDresses as sharedDresses } from '../../data/dresses';
 import { dressImages } from '../../data/dressImages';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { BoutiqueTile, boutiqueIdentities } from '../BoutiqueTile';
 
@@ -20,12 +20,12 @@ export default function DesktopSearch({ onNavigate, onAddToCart, onAddToWishlist
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedColors, setSelectedColors] = useState<string[]>([]);
 
-  const allDresses = sharedDresses.map((d, i) => ({
+  const allDresses = [...sharedDresses].sort((a, b) => b.id - a.id).map((d, i) => ({
     ...d,
     aiMatch: 85 + (i % 15),
     expressDelivery: d.express,
     occasion: ['wedding', 'evening', 'business', 'casual'][i % 4],
-    image: dressImages[i % dressImages.length],
+    image: d.image_url || dressImages[i % dressImages.length],
     sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'].slice(i % 3, (i % 3) + 4),
     colors: [
       ['Midnight', 'Ivory'],
@@ -75,6 +75,16 @@ export default function DesktopSearch({ onNavigate, onAddToCart, onAddToWishlist
     
     return true;
   });
+
+  // Pagination
+  const perPage = 9;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(filteredDresses.length / perPage));
+  // Keep the page in range when filters shrink the result set.
+  useEffect(() => { if (page > totalPages) setPage(1); }, [totalPages, page]);
+  // Reset to the first page whenever the filters change.
+  useEffect(() => { setPage(1); }, [selectedOccasion, priceRange, selectedSizes, selectedColors]);
+  const pageDresses = filteredDresses.slice((page - 1) * perPage, page * perPage);
 
   return (
     <div className="min-h-screen bg-ivory">
@@ -278,7 +288,7 @@ export default function DesktopSearch({ onNavigate, onAddToCart, onAddToWishlist
           <div className="flex-1">
             {viewMode === 'grid' ? (
               <div className="grid grid-cols-3 gap-6">
-                {filteredDresses.map((dress) => (
+                {pageDresses.map((dress) => (
                   <div key={dress.id} className="group">
                     <div 
                       className="relative aspect-[3/4] bg-ivory-dark rounded-sm mb-4 flex items-center justify-center border border-warm-grey-lighter cursor-pointer overflow-hidden hover:border-emerald luxury-transition luxury-shadow-sm hover:luxury-shadow"
@@ -341,7 +351,7 @@ export default function DesktopSearch({ onNavigate, onAddToCart, onAddToWishlist
               </div>
             ) : (
               <div className="space-y-4">
-                {filteredDresses.map((dress) => (
+                {pageDresses.map((dress) => (
                   <div 
                     key={dress.id}
                     className="group flex gap-6 border border-warm-grey-lighter rounded-sm p-5 hover:border-emerald luxury-transition cursor-pointer bg-white luxury-shadow-sm hover:luxury-shadow"
@@ -397,26 +407,37 @@ export default function DesktopSearch({ onNavigate, onAddToCart, onAddToWishlist
             )}
 
             {/* Pagination */}
-            <div className="mt-16 flex items-center justify-center gap-2">
-              <button className="px-5 py-2.5 border border-warm-grey-lighter text-charcoal rounded-sm hover:border-emerald luxury-transition tracking-wide">
-                Previous
-              </button>
-              {[1, 2, 3, 4].map((page) => (
+            {totalPages > 1 && (
+              <div className="mt-16 flex items-center justify-center gap-2">
                 <button
-                  key={page}
-                  className={`w-10 h-10 rounded-sm luxury-transition tracking-wide ${
-                    page === 1
-                      ? 'bg-emerald text-ivory'
-                      : 'border border-warm-grey-lighter text-charcoal hover:border-emerald'
-                  }`}
+                  onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  disabled={page === 1}
+                  className="px-5 py-2.5 border border-warm-grey-lighter text-charcoal rounded-sm hover:border-emerald luxury-transition tracking-wide disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-warm-grey-lighter"
                 >
-                  {page}
+                  Previous
                 </button>
-              ))}
-              <button className="px-5 py-2.5 border border-warm-grey-lighter text-charcoal rounded-sm hover:border-emerald luxury-transition tracking-wide">
-                Next
-              </button>
-            </div>
+                {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((p) => (
+                  <button
+                    key={p}
+                    onClick={() => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    className={`w-10 h-10 rounded-sm luxury-transition tracking-wide ${
+                      p === page
+                        ? 'bg-emerald text-ivory'
+                        : 'border border-warm-grey-lighter text-charcoal hover:border-emerald'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                ))}
+                <button
+                  onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  disabled={page === totalPages}
+                  className="px-5 py-2.5 border border-warm-grey-lighter text-charcoal rounded-sm hover:border-emerald luxury-transition tracking-wide disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-warm-grey-lighter"
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
