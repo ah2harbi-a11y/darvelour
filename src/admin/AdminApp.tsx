@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { LayoutDashboard, Store, ShoppingBag, Package, Crown, Users, LogOut, Plus, Pencil, Trash2, X, Check, Upload, Image as ImageIcon } from 'lucide-react';
+import { LayoutDashboard, Store, ShoppingBag, Package, Crown, Users, LogOut, Plus, Pencil, Trash2, X, Check, Upload, Image as ImageIcon, Eye, Star, Zap } from 'lucide-react';
 import './admin.css';
 
 const API = '/api/admin';
@@ -154,10 +154,10 @@ function StatCard({ label, value, icon: Icon }: { label: string; value: string |
 }
 
 // --- Modal ---
-function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
+function Modal({ title, onClose, children, wide }: { title: string; onClose: () => void; children: React.ReactNode; wide?: boolean }) {
   return (
     <div className="admin-modal-overlay" onClick={onClose}>
-      <div className="admin-modal" onClick={e => e.stopPropagation()}>
+      <div className={`admin-modal${wide ? ' admin-modal-wide' : ''}`} onClick={e => e.stopPropagation()}>
         <div className="admin-modal-header">
           <h3 style={{ fontSize: 14, fontWeight: 600, color: '#fff' }}>{title}</h3>
           <button onClick={onClose} className="admin-btn-icon"><X style={{ width: 20, height: 20 }} /></button>
@@ -279,28 +279,76 @@ function BoutiquesPage() {
 }
 
 // --- Dresses ---
+// Storefront-style product card used for both the live form preview and the view modal.
+function DressPreview({ data }: { data: any }) {
+  const price = Number(data.price) || 0;
+  const rating = Number(data.rating) || 0;
+  const reviews = Number(data.reviews) || 0;
+  const sizes = String(data.sizes || '').split(',').map((s: string) => s.trim()).filter(Boolean);
+  return (
+    <div className="dress-preview">
+      <div className="dress-preview-imgwrap">
+        {data.image_url ? (
+          <img src={data.image_url} alt={data.name || 'dress'} className="dress-preview-img" />
+        ) : (
+          <div className="dress-preview-noimg"><ImageIcon style={{ width: 28, height: 28 }} /><span>No image</span></div>
+        )}
+        {data.express ? <span className="dress-preview-express"><Zap style={{ width: 11, height: 11 }} /> Express</span> : null}
+      </div>
+      <div className="dress-preview-body">
+        {data.collection ? <div className="dress-preview-collection">{data.collection}</div> : null}
+        <div className="dress-preview-name">{data.name || 'Untitled dress'}</div>
+        <div className="dress-preview-boutique">{data.boutique || 'Boutique name'}</div>
+        <div className="dress-preview-rating">
+          <Star style={{ width: 13, height: 13, fill: '#C5A059', color: '#C5A059' }} />
+          {rating.toFixed(1)} <span className="dress-preview-reviews">({reviews} reviews)</span>
+        </div>
+        {sizes.length > 0 && (
+          <div className="dress-preview-sizes">{sizes.map(s => <span key={s} className="dress-preview-size">{s}</span>)}</div>
+        )}
+        {data.description ? <p className="dress-preview-desc">{data.description}</p> : null}
+        <div className="dress-preview-price">SAR {price.toLocaleString()}</div>
+      </div>
+    </div>
+  );
+}
+
 function DressesPage() {
   const [dresses, setDresses] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<any>(null);
+  const [viewing, setViewing] = useState<any>(null);
+  const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({ name: '', boutique: '', price: '', rating: '4.0', reviews: '0', express: false, collection: 'Evening Collection', image_url: '', description: '', sizes: 'S,M,L' });
 
   const load = useCallback(() => { adminRequest('/dresses').then(setDresses).catch(() => {}); }, []);
   useEffect(() => { load(); }, [load]);
 
   const openNew = () => { setForm({ name: '', boutique: '', price: '', rating: '4.0', reviews: '0', express: false, collection: 'Evening Collection', image_url: '', description: '', sizes: 'S,M,L' }); setEditing(null); setShowForm(true); };
-  const openEdit = (d: any) => { setForm({ name: d.name, boutique: d.boutique, price: String(d.price), rating: String(d.rating), reviews: String(d.reviews), express: !!d.express, collection: d.collection, image_url: d.image_url || '', description: d.description || '', sizes: d.sizes || 'S,M,L' }); setEditing(d); setShowForm(true); };
+  const openEdit = (d: any) => { setForm({ name: d.name, boutique: d.boutique, price: String(d.price), rating: String(d.rating), reviews: String(d.reviews), express: !!d.express, collection: d.collection, image_url: d.image_url || '', description: d.description || '', sizes: d.sizes || 'S,M,L' }); setEditing(d); setViewing(null); setShowForm(true); };
+
+  const formValid = form.name.trim() && form.boutique.trim() && parseFloat(form.price) > 0;
 
   const handleSave = async () => {
-    const body = { ...form, price: parseFloat(form.price), rating: parseFloat(form.rating), reviews: parseInt(form.reviews) };
-    if (editing) await adminRequest(`/dresses/${editing.id}`, { method: 'PUT', body: JSON.stringify(body) });
-    else await adminRequest('/dresses', { method: 'POST', body: JSON.stringify(body) });
-    setShowForm(false); load();
+    if (!formValid || saving) return;
+    setSaving(true);
+    try {
+      const body = { ...form, price: parseFloat(form.price), rating: parseFloat(form.rating) || 0, reviews: parseInt(form.reviews) || 0 };
+      if (editing) await adminRequest(`/dresses/${editing.id}`, { method: 'PUT', body: JSON.stringify(body) });
+      else await adminRequest('/dresses', { method: 'POST', body: JSON.stringify(body) });
+      setShowForm(false); load();
+    } catch (e: any) {
+      alert(e.message || 'Failed to save dress');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Delete this dress?')) return;
-    await adminRequest(`/dresses/${id}`, { method: 'DELETE' }); load();
+    if (!confirm('Delete this dress? This cannot be undone.')) return;
+    await adminRequest(`/dresses/${id}`, { method: 'DELETE' });
+    setViewing(null);
+    load();
   };
 
   return (
@@ -316,7 +364,7 @@ function DressesPage() {
           </tr></thead>
           <tbody>
             {dresses.map(d => (
-              <tr key={d.id}>
+              <tr key={d.id} onClick={() => setViewing(d)} style={{ cursor: 'pointer' }}>
                 <td style={{ width: 48 }}>
                   {d.image_url ? (
                     <img src={d.image_url} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
@@ -333,10 +381,11 @@ function DressesPage() {
                 <td style={{ color: '#9ca3af' }}>★ {d.rating}</td>
                 <td><span className="admin-badge admin-badge-gray">{d.collection}</span></td>
                 <td>{d.express ? <Check style={{ width: 16, height: 16, color: '#4ade80' }} /> : <span style={{ color: '#374151' }}>—</span>}</td>
-                <td>
+                <td onClick={e => e.stopPropagation()}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <button onClick={() => openEdit(d)} className="admin-btn-icon"><Pencil style={{ width: 14, height: 14 }} /></button>
-                    <button onClick={() => handleDelete(d.id)} className="admin-btn-icon danger"><Trash2 style={{ width: 14, height: 14 }} /></button>
+                    <button onClick={() => setViewing(d)} className="admin-btn-icon" title="View"><Eye style={{ width: 14, height: 14 }} /></button>
+                    <button onClick={() => openEdit(d)} className="admin-btn-icon" title="Edit"><Pencil style={{ width: 14, height: 14 }} /></button>
+                    <button onClick={() => handleDelete(d.id)} className="admin-btn-icon danger" title="Delete"><Trash2 style={{ width: 14, height: 14 }} /></button>
                   </div>
                 </td>
               </tr>
@@ -345,31 +394,60 @@ function DressesPage() {
         </table>
         {dresses.length === 0 && <p style={{ color: '#6b7280', fontSize: 14, textAlign: 'center', padding: '32px 0' }}>No dresses yet.</p>}
       </div>
+
+      {viewing && (
+        <Modal title={`Dress #${viewing.id}`} onClose={() => setViewing(null)} wide>
+          <div className="admin-form-split">
+            <DressPreview data={viewing} />
+            <div className="admin-view-details">
+              <div className="admin-view-row"><span>Status</span><b>{viewing.in_stock ? 'In stock' : 'Out of stock'}</b></div>
+              <div className="admin-view-row"><span>Collection</span><b>{viewing.collection}</b></div>
+              <div className="admin-view-row"><span>Boutique</span><b>{viewing.boutique}</b></div>
+              <div className="admin-view-row"><span>Price</span><b>SAR {Number(viewing.price).toLocaleString()}</b></div>
+              <div className="admin-view-row"><span>Rating</span><b>★ {viewing.rating} ({viewing.reviews})</b></div>
+              <div className="admin-view-row"><span>Sizes</span><b>{viewing.sizes || '—'}</b></div>
+              <div className="admin-view-row"><span>Express</span><b>{viewing.express ? 'Yes' : 'No'}</b></div>
+              {viewing.description && <p className="admin-view-desc">{viewing.description}</p>}
+              <div style={{ display: 'flex', gap: 8, marginTop: 'auto', paddingTop: 16 }}>
+                <button onClick={() => openEdit(viewing)} className="admin-btn-primary" style={{ width: 'auto', flex: 1 }}><Pencil style={{ width: 14, height: 14 }} /> Edit</button>
+                <button onClick={() => handleDelete(viewing.id)} className="admin-btn-icon danger" style={{ width: 40 }}><Trash2 style={{ width: 16, height: 16 }} /></button>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
+
       {showForm && (
-        <Modal title={editing ? 'Edit Dress' : 'New Dress'} onClose={() => setShowForm(false)}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div><label className="admin-label">Name *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="admin-input" /></div>
-            <div className="admin-grid-2">
-              <div><label className="admin-label">Boutique *</label><input value={form.boutique} onChange={e => setForm({ ...form, boutique: e.target.value })} className="admin-input" /></div>
-              <div><label className="admin-label">Price (SAR) *</label><input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="admin-input" /></div>
+        <Modal title={editing ? `Edit Dress #${editing.id}` : 'New Dress'} onClose={() => setShowForm(false)} wide>
+          <div className="admin-form-split">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div><label className="admin-label">Name *</label><input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="admin-input" /></div>
+              <div className="admin-grid-2">
+                <div><label className="admin-label">Boutique *</label><input value={form.boutique} onChange={e => setForm({ ...form, boutique: e.target.value })} className="admin-input" /></div>
+                <div><label className="admin-label">Price (SAR) *</label><input type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} className="admin-input" /></div>
+              </div>
+              <div className="admin-grid-2">
+                <div><label className="admin-label">Rating</label><input type="number" step="0.1" min="0" max="5" value={form.rating} onChange={e => setForm({ ...form, rating: e.target.value })} className="admin-input" /></div>
+                <div><label className="admin-label">Reviews Count</label><input type="number" value={form.reviews} onChange={e => setForm({ ...form, reviews: e.target.value })} className="admin-input" /></div>
+              </div>
+              <div><label className="admin-label">Collection</label>
+                <select value={form.collection} onChange={e => setForm({ ...form, collection: e.target.value })} className="admin-input">
+                  <option>Evening Collection</option><option>Spring Collection</option><option>New Arrivals</option><option>Summer Collection</option><option>Bridal Collection</option>
+                </select>
+              </div>
+              <div><label className="admin-label">Sizes (comma-separated)</label><input value={form.sizes} onChange={e => setForm({ ...form, sizes: e.target.value })} className="admin-input" /></div>
+              <div><label className="admin-label">Description</label><textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="admin-input" style={{ height: 80, resize: 'none' }} /></div>
+              <ImageUploader value={form.image_url} onChange={url => setForm({ ...form, image_url: url })} />
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
+                <input type="checkbox" checked={form.express} onChange={e => setForm({ ...form, express: e.target.checked })} />
+                <span style={{ fontSize: 14, color: '#d1d5db' }}>Express Delivery</span>
+              </label>
+              <button onClick={handleSave} disabled={!formValid || saving} className="admin-btn-primary">{saving ? 'Saving…' : `${editing ? 'Update' : 'Create'} Dress`}</button>
             </div>
-            <div className="admin-grid-2">
-              <div><label className="admin-label">Rating</label><input type="number" step="0.1" min="0" max="5" value={form.rating} onChange={e => setForm({ ...form, rating: e.target.value })} className="admin-input" /></div>
-              <div><label className="admin-label">Reviews Count</label><input type="number" value={form.reviews} onChange={e => setForm({ ...form, reviews: e.target.value })} className="admin-input" /></div>
+            <div className="admin-preview-pane">
+              <div className="admin-preview-label"><Eye style={{ width: 12, height: 12 }} /> Live preview — how customers will see it</div>
+              <DressPreview data={form} />
             </div>
-            <div><label className="admin-label">Collection</label>
-              <select value={form.collection} onChange={e => setForm({ ...form, collection: e.target.value })} className="admin-input">
-                <option>Evening Collection</option><option>Spring Collection</option><option>New Arrivals</option><option>Summer Collection</option><option>Bridal Collection</option>
-              </select>
-            </div>
-            <div><label className="admin-label">Sizes (comma-separated)</label><input value={form.sizes} onChange={e => setForm({ ...form, sizes: e.target.value })} className="admin-input" /></div>
-            <div><label className="admin-label">Description</label><textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} className="admin-input" style={{ height: 80, resize: 'none' }} /></div>
-            <ImageUploader value={form.image_url} onChange={url => setForm({ ...form, image_url: url })} />
-            <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
-              <input type="checkbox" checked={form.express} onChange={e => setForm({ ...form, express: e.target.checked })} />
-              <span style={{ fontSize: 14, color: '#d1d5db' }}>Express Delivery</span>
-            </label>
-            <button onClick={handleSave} className="admin-btn-primary">{editing ? 'Update' : 'Create'} Dress</button>
           </div>
         </Modal>
       )}
