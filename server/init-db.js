@@ -30,6 +30,7 @@ async function init() {
       express INTEGER DEFAULT 0,
       collection TEXT DEFAULT 'Evening Collection',
       image_url TEXT,
+      images TEXT DEFAULT '[]',
       description TEXT,
       sizes TEXT DEFAULT 'S,M,L',
       in_stock INTEGER DEFAULT 1,
@@ -122,6 +123,9 @@ async function init() {
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `);
+
+  // Migrations for databases created before a column existed (idempotent).
+  try { await client.execute("ALTER TABLE dresses ADD COLUMN images TEXT DEFAULT '[]'"); } catch (e) { /* already exists */ }
 
   // --- Seed dresses ---
   const dressCount = (await client.execute('SELECT COUNT(*) as count FROM dresses')).rows[0].count;

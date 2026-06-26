@@ -140,22 +140,32 @@ router.get('/dresses', adminAuth, async (req, res) => {
 });
 
 router.post('/dresses', adminAuth, async (req, res) => {
-  const { name, boutique, price, rating, reviews, express, collection, image_url, description, sizes } = req.body;
+  const { name, boutique, price, rating, reviews, express, collection, image_url, description, sizes, images } = req.body;
   if (!name || !boutique || !price) return res.status(400).json({ error: 'Name, boutique and price are required' });
 
+  // Gallery: store the full list as JSON; keep image_url synced to the cover (first) image.
+  const imgArr = Array.isArray(images) ? images.filter(Boolean) : [];
+  const cover = imgArr[0] || image_url || '';
+
   const result = await db.prepare(
-    'INSERT INTO dresses (name, boutique, price, rating, reviews, express, collection, image_url, description, sizes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-  ).run(name, boutique, price, rating || 4.0, reviews || 0, express ? 1 : 0, collection || 'Evening Collection', image_url || '', description || '', sizes || 'S,M,L');
+    'INSERT INTO dresses (name, boutique, price, rating, reviews, express, collection, image_url, images, description, sizes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+  ).run(name, boutique, price, rating || 4.0, reviews || 0, express ? 1 : 0, collection || 'Evening Collection', cover, JSON.stringify(imgArr), description || '', sizes || 'S,M,L');
 
   const dress = await db.prepare('SELECT * FROM dresses WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(dress);
 });
 
 router.put('/dresses/:id', adminAuth, async (req, res) => {
-  const { name, boutique, price, rating, reviews, express, collection, image_url, description, sizes, in_stock } = req.body;
+  const { name, boutique, price, rating, reviews, express, collection, image_url, description, sizes, in_stock, images } = req.body;
+
+  // When an images array is provided, persist it and sync the cover; otherwise leave both untouched.
+  const imgArr = Array.isArray(images) ? images.filter(Boolean) : null;
+  const imagesJson = imgArr ? JSON.stringify(imgArr) : null;
+  const cover = imgArr ? (imgArr[0] || '') : (image_url !== undefined ? image_url : null);
+
   await db.prepare(
-    'UPDATE dresses SET name=COALESCE(?,name), boutique=COALESCE(?,boutique), price=COALESCE(?,price), rating=COALESCE(?,rating), reviews=COALESCE(?,reviews), express=COALESCE(?,express), collection=COALESCE(?,collection), image_url=COALESCE(?,image_url), description=COALESCE(?,description), sizes=COALESCE(?,sizes), in_stock=COALESCE(?,in_stock) WHERE id=?'
-  ).run(name, boutique, price, rating, reviews, express !== undefined ? (express ? 1 : 0) : null, collection, image_url, description, sizes, in_stock !== undefined ? (in_stock ? 1 : 0) : null, req.params.id);
+    'UPDATE dresses SET name=COALESCE(?,name), boutique=COALESCE(?,boutique), price=COALESCE(?,price), rating=COALESCE(?,rating), reviews=COALESCE(?,reviews), express=COALESCE(?,express), collection=COALESCE(?,collection), image_url=COALESCE(?,image_url), images=COALESCE(?,images), description=COALESCE(?,description), sizes=COALESCE(?,sizes), in_stock=COALESCE(?,in_stock) WHERE id=?'
+  ).run(name, boutique, price, rating, reviews, express !== undefined ? (express ? 1 : 0) : null, collection, cover, imagesJson, description, sizes, in_stock !== undefined ? (in_stock ? 1 : 0) : null, req.params.id);
   const dress = await db.prepare('SELECT * FROM dresses WHERE id = ?').get(req.params.id);
   res.json(dress);
 });
