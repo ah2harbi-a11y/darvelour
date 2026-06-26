@@ -27,3 +27,4 @@ server/uploads/
 
 # Claude Code local settings
 .claude/
+.env*
