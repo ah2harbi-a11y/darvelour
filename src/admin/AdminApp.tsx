@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { LayoutDashboard, Store, ShoppingBag, Package, Crown, Users, LogOut, Plus, Pencil, Trash2, X, Check, Upload, Image as ImageIcon, Eye, Star, Zap } from 'lucide-react';
+import { LayoutDashboard, Store, ShoppingBag, Package, Crown, Users, LogOut, Plus, Pencil, Trash2, X, Check, Upload, Image as ImageIcon, Eye, Star, Zap, ChevronUp, ChevronDown } from 'lucide-react';
 import './admin.css';
 
 const API = '/api/admin';
@@ -358,6 +358,15 @@ function BoutiquesPage() {
     await adminRequest(`/boutiques/${id}`, { method: 'DELETE' }); load();
   };
 
+  const moveBoutique = async (index: number, direction: 'up' | 'down') => {
+    const newList = [...boutiques];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= newList.length) return;
+    [newList[index], newList[swapIndex]] = [newList[swapIndex], newList[index]];
+    setBoutiques(newList);
+    await adminRequest('/boutiques/reorder', { method: 'PUT', body: JSON.stringify({ orderedIds: newList.map(b => b.id) }) });
+  };
+
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
@@ -365,9 +374,18 @@ function BoutiquesPage() {
         <button onClick={openNew} className="admin-btn-add"><Plus style={{ width: 16, height: 16 }} /> Add Boutique</button>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-        {boutiques.map(b => (
+        {boutiques.map((b, index) => (
           <div key={b.id} className="admin-list-item" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <button onClick={() => moveBoutique(index, 'up')} disabled={index === 0} className="admin-btn-icon" style={{ opacity: index === 0 ? 0.3 : 1 }} title="Move up">
+                  <ChevronUp style={{ width: 16, height: 16 }} />
+                </button>
+                <button onClick={() => moveBoutique(index, 'down')} disabled={index === boutiques.length - 1} className="admin-btn-icon" style={{ opacity: index === boutiques.length - 1 ? 0.3 : 1 }} title="Move down">
+                  <ChevronDown style={{ width: 16, height: 16 }} />
+                </button>
+              </div>
+              <span style={{ color: '#4b5563', fontSize: 12, fontWeight: 600, minWidth: 20, textAlign: 'center' }}>#{index + 1}</span>
               {b.image_url ? (
                 <img src={b.image_url} alt={b.name} style={{ width: 48, height: 48, borderRadius: 12, objectFit: 'cover', flexShrink: 0 }} />
               ) : (

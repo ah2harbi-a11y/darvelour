@@ -52,7 +52,7 @@ router.get('/', optionalAuth, async (req, res) => {
 router.get('/boutiques', async (req, res) => {
   // Try to get from boutiques table first, fall back to distinct dress boutiques
   try {
-    const boutiquesTable = await db.prepare('SELECT * FROM boutiques ORDER BY name').all();
+    const boutiquesTable = await db.prepare('SELECT * FROM boutiques ORDER BY sort_order ASC, name ASC').all();
     if (boutiquesTable.length > 0) {
       // Merge with dress counts
       const counts = await db.prepare('SELECT boutique, COUNT(*) as count FROM dresses WHERE in_stock = 1 GROUP BY boutique').all();

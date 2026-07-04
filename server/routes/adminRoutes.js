@@ -97,7 +97,7 @@ router.get('/stats', adminAuth, async (req, res) => {
 
 // --- Boutiques CRUD ---
 router.get('/boutiques', adminAuth, async (req, res) => {
-  const boutiques = await db.prepare('SELECT * FROM boutiques ORDER BY name').all();
+  const boutiques = await db.prepare('SELECT * FROM boutiques ORDER BY sort_order ASC, name ASC').all();
   // Get dress count per boutique
   const counts = await db.prepare('SELECT boutique, COUNT(*) as count FROM dresses GROUP BY boutique').all();
   const countMap = {};
@@ -117,6 +117,16 @@ router.post('/boutiques', adminAuth, async (req, res) => {
   } catch (e) {
     res.status(400).json({ error: 'Boutique name already exists' });
   }
+});
+
+// Reorder boutiques (must be before /:id to avoid conflict)
+router.put('/boutiques/reorder', adminAuth, async (req, res) => {
+  const { orderedIds } = req.body;
+  if (!Array.isArray(orderedIds)) return res.status(400).json({ error: 'orderedIds array required' });
+  for (let i = 0; i < orderedIds.length; i++) {
+    await db.prepare('UPDATE boutiques SET sort_order = ? WHERE id = ?').run(i, orderedIds[i]);
+  }
+  res.json({ success: true });
 });
 
 router.put('/boutiques/:id', adminAuth, async (req, res) => {

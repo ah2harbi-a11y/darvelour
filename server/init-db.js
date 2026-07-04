@@ -120,12 +120,14 @@ async function init() {
       phone TEXT,
       email TEXT,
       image_url TEXT DEFAULT '',
+      sort_order INTEGER DEFAULT 0,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `);
 
   // Migrations for databases created before a column existed (idempotent).
   try { await client.execute("ALTER TABLE dresses ADD COLUMN images TEXT DEFAULT '[]'"); } catch (e) { /* already exists */ }
+  try { await client.execute("ALTER TABLE boutiques ADD COLUMN sort_order INTEGER DEFAULT 0"); } catch (e) { /* already exists */ }
 
   // --- Seed dresses ---
   const dressCount = (await client.execute('SELECT COUNT(*) as count FROM dresses')).rows[0].count;
