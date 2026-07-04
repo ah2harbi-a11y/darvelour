@@ -21,7 +21,7 @@ export default function MobileWishlist({ onNavigate, onGoBack, onAddToCart, onRe
   return (
     <div className="w-full min-h-screen bg-gray-50 flex flex-col">
       <MobileHeader
-        title="My Wishlist"
+        title="My DV Closet"
         showBack={true}
         showCart={true}
         onNavigate={onNavigate}
@@ -36,7 +36,7 @@ export default function MobileWishlist({ onNavigate, onGoBack, onAddToCart, onRe
         {items.length === 0 ? (
           <div className="flex-1 flex flex-col items-center justify-center px-4 py-20">
             <Heart className="w-16 h-16 text-gray-300 mb-4" />
-            <h2 className="text-lg font-bold mb-2">Your wishlist is empty</h2>
+            <h2 className="text-lg font-bold mb-2">Your DV Closet is empty</h2>
             <p className="text-sm text-gray-500 mb-6 text-center">Save your favorite dresses to find them easily later</p>
             <button
               onClick={() => onNavigate('search')}

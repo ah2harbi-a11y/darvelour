@@ -23,7 +23,7 @@ export default function DesktopWishlist({ onNavigate, onGoBack, onAddToCart, onR
             <button onClick={onGoBack} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-3xl font-light">My Wishlist</h1>
+            <h1 className="text-3xl font-light">My DV Closet</h1>
           </div>
           <div className="text-sm text-gray-500">{wishlistItems.length} items</div>
         </div>
@@ -31,7 +31,7 @@ export default function DesktopWishlist({ onNavigate, onGoBack, onAddToCart, onR
         {wishlistItems.length === 0 ? (
           <div className="text-center py-20">
             <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h2 className="text-2xl font-light mb-2">Your wishlist is empty</h2>
+            <h2 className="text-2xl font-light mb-2">Your DV Closet is empty</h2>
             <p className="text-gray-500 mb-6">Browse our collection and save your favorite dresses</p>
             <button
               onClick={() => onNavigate('search')}

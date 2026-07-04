@@ -98,7 +98,7 @@ export default function VirtualTryOnResult() {
             TRY ANOTHER DRESS
           </button>
           <div className="text-center">
-            <button className="text-xs text-neutral-600 underline">Save to Wishlist</button>
+            <button className="text-xs text-neutral-600 underline">Save to DV Closet</button>
           </div>
         </div>
       </div>

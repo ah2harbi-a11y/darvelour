@@ -59,7 +59,7 @@ export default function ProfileScreen() {
             <div className="text-xs font-bold text-neutral-500 mb-3">ACTIVITY</div>
             <div className="space-y-0">
               <button className="w-full border-b border-neutral-100 py-3 flex items-center justify-between text-left">
-                <span className="text-sm">Wishlist</span>
+                <span className="text-sm">DV Closet</span>
                 <span className="text-neutral-400">→</span>
               </button>
               <button className="w-full border-b border-neutral-100 py-3 flex items-center justify-between text-left">
@@ -120,7 +120,7 @@ export default function ProfileScreen() {
       <div className="border-t border-neutral-200 flex">
         <button className="flex-1 py-3 border-r border-neutral-100 text-xs font-bold text-neutral-600">Home</button>
         <button className="flex-1 py-3 border-r border-neutral-100 text-xs font-bold text-neutral-600">Search</button>
-        <button className="flex-1 py-3 border-r border-neutral-100 text-xs font-bold text-neutral-600">Wishlist</button>
+        <button className="flex-1 py-3 border-r border-neutral-100 text-xs font-bold text-neutral-600">DV Closet</button>
         <button className="flex-1 py-3 border-r border-neutral-100 text-xs font-bold text-neutral-600">Orders</button>
         <button className="flex-1 py-3 bg-neutral-800 text-white text-xs font-bold">Profile</button>
       </div>

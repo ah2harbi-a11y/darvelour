@@ -63,7 +63,7 @@ export default function DesktopNav({ onNavigate, currentPage, cartCount = 0, wis
           <button
             onClick={() => onNavigate('wishlist')}
             className={`p-1.5 hover:text-black transition-colors relative ${currentPage === 'wishlist' ? 'text-black' : 'text-gray-500'}`}
-            title="Wishlist"
+            title="DV Closet"
           >
             <Heart className="w-5 h-5" />
             {wishlistCount > 0 && (

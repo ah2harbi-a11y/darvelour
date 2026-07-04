@@ -96,7 +96,7 @@ export default function SearchResultsScreen() {
         </button>
         <button className="flex-1 py-3 flex flex-col items-center gap-1">
           <span className="text-base text-neutral-400">♡</span>
-          <span className="text-[10px] text-neutral-400">Wishlist</span>
+          <span className="text-[10px] text-neutral-400">DV Closet</span>
         </button>
         <button className="flex-1 py-3 flex flex-col items-center gap-1">
           <span className="text-base text-neutral-400">📦</span>

@@ -83,7 +83,7 @@ export default function BoutiqueProfile() {
       <div className="border-t border-neutral-200 flex bg-white">
         <button className="flex-1 py-3 text-xs font-bold text-neutral-400">Home</button>
         <button className="flex-1 py-3 text-xs font-bold text-neutral-400">Search</button>
-        <button className="flex-1 py-3 text-xs font-bold text-neutral-400">Wishlist</button>
+        <button className="flex-1 py-3 text-xs font-bold text-neutral-400">DV Closet</button>
         <button className="flex-1 py-3 text-xs font-bold text-neutral-400">Orders</button>
         <button className="flex-1 py-3 text-xs font-bold text-neutral-800">Profile</button>
       </div>

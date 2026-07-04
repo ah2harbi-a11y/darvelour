@@ -133,7 +133,7 @@ export default function DesktopDressDetail({ onNavigate, onGoBack, onAddToCart, 
                 className="w-full border border-black py-4 font-bold text-sm tracking-wider hover:bg-gray-50 flex items-center justify-center gap-2"
               >
                 <Heart className="w-4 h-4" />
-                ADD TO WISHLIST
+                ADD TO DV CLOSET
               </button>
             </div>
 

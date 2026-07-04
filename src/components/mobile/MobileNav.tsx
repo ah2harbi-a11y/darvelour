@@ -59,7 +59,7 @@ export default function MobileNav({ currentPage, onNavigate, wishlistItems = 0 }
           </span>
         )}
         <span className={`text-[9px] ${currentPage === 'wishlist' ? 'text-black font-bold' : 'text-gray-500'}`}>
-          Wishlist
+          DV Closet
         </span>
       </button>
       
