@@ -35,13 +35,13 @@ export default function MobileNav({ currentPage, onNavigate, wishlistItems = 0 }
       </button>
       
       <button 
-        onClick={() => onNavigate('virtual-tryon')}
+        onClick={() => onNavigate('ai-stylist')}
         className={`flex-1 py-3 flex flex-col items-center gap-1 ${
-          currentPage === 'virtual-tryon' ? 'bg-gray-200' : ''
+          currentPage === 'ai-stylist' ? 'bg-gray-200' : ''
         }`}
       >
-        <Sparkles className={`w-5 h-5 ${currentPage === 'virtual-tryon' ? 'text-black' : 'text-gray-500'}`} />
-        <span className={`text-[9px] ${currentPage === 'virtual-tryon' ? 'text-black font-bold' : 'text-gray-500'}`}>
+        <Sparkles className={`w-5 h-5 ${currentPage === 'ai-stylist' ? 'text-black' : 'text-gray-500'}`} />
+        <span className={`text-[9px] ${currentPage === 'ai-stylist' ? 'text-black font-bold' : 'text-gray-500'}`}>
           AI Stylist
         </span>
       </button>
